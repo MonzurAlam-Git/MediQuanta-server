@@ -1,0 +1,32 @@
+[
+  {
+    "title": "Health Data Analysis",
+    "description": "Leverage our advanced algorithms to analyze your health data and generate personalized insights to optimize your well-being.",
+    "icon": "https://i.ibb.co/2gXcF9n/6193827-3180531.jpg"
+  },
+  {
+    "title": "Disease Risk Assessment",
+    "description": "Identify potential health risks based on your medical history and lifestyle factors. Proactive measures can help prevent illnesses.",
+    "icon": "https://i.ibb.co/9cMb5xJ/new-normal-office-corporate-workers.jpg"
+  },
+  {
+    "title": "Telehealth Consultation",
+    "description": "Connect with qualified healthcare professionals remotely for diagnosis, treatment plans, and ongoing health management.",
+    "icon": "https://i.ibb.co/cTgYHX5/doctor-offering-medical-teleconsultation.jpg"
+  },
+  {
+    "title": "Personalized Health Recommendations",
+    "description": "Receive tailored recommendations on diet, exercise, and lifestyle modifications based on your health data and goals.",
+    "icon": "recommendations.svg"
+  },
+  {
+    "title": "Medical Information Library",
+    "description": "Access a comprehensive library of credible health information curated by medical professionals to empower your health decisions.",
+    "icon": "https://i.ibb.co/pym6YmD/calorie-counter-health-diet-app-concept.jpg"
+  },
+  {
+    "title": "Health Data Tracking",
+    "description": "Track your health vitals, medications, and other relevant data securely in one place for better self-management and informed discussions with healthcare providers.",
+    "icon": "https://i.ibb.co/GtDWLS1/doctor-from-future-concept.jpg"
+  }
+]
