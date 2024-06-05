@@ -37,7 +37,8 @@ async function run() {
 
     app.get("/users/:id", async (req, res) => {
       const id = req.params.id;
-      const result = await users.findOne();
+      const query = { _id: new ObjectId(id) };
+      const result = await users.findOne(query);
       res.send(result);
     });
 
@@ -48,14 +49,37 @@ async function run() {
     });
 
     // patient data operations
+    app.get("/patientData", async (req, res) => {
+      const result = await patientData.find().toArray();
+      res.send(result);
+    });
+    app.get("/patientData/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+
+      const result = await patientData.findOne(query);
+      res.send(result);
+    });
     app.post("/patientData", async (req, res) => {
       const data = req.body;
       const result = await patientData.insertOne(data);
       res.send(data);
     });
 
+    app.patch("/patientData/:id", async (req, res) => {
+      const id = req.params.id;
+      const updatedData = req.body;
+      const result = await patientData.updateOne(
+        { _id: new ObjectId(id) },
+        { $set: updatedData }
+      );
+      res.send(result);
+      console.log(updatedData);
+      console.log(id);
+    });
+
     app.delete("/patientData/:id", async (req, res) => {
-      const id = req.params._id;
+      const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await patientData.deleteOne(query);
       res.send(result);
