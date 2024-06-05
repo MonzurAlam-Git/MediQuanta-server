@@ -91,3 +91,5 @@ app.listen(port, () => {
 // dfjJoUIa2ifReuaj
 
 // mongodb+srv://monzuralam16:dfjJoUIa2ifReuaj@cluster0.txrvulz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+
+// https://mediquanta-server-1.onrender.com/
