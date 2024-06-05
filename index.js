@@ -44,6 +44,10 @@ async function run() {
 
     app.post("/users", async (req, res) => {
       const data = req.body;
+      const usersExist = await users.findOne({ email: data?.email });
+      if (usersExist) {
+        return res.send("User already exist");
+      }
       const result = await users.insertOne(data);
       res.send(data);
     });
@@ -84,6 +88,7 @@ async function run() {
       const result = await patientData.deleteOne(query);
       res.send(result);
     });
+
     //  services operations
     app.get("/services", async (req, res) => {
       const result = await services.find().toArray();
@@ -116,4 +121,5 @@ app.listen(port, () => {
 
 // mongodb+srv://monzuralam16:dfjJoUIa2ifReuaj@cluster0.txrvulz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
 
-// https://mediquanta-server-1.onrender.com/
+// Server : https://mediquanta-server-1.onrender.com/
+// Client : https://medi-quanta.vercel.app/
