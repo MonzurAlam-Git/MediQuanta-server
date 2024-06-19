@@ -1,5 +1,7 @@
 const express = require("express");
 const cors = require("cors");
+var jwt = require("jsonwebtoken");
+
 const app = express();
 const port = 3000;
 
@@ -18,6 +20,31 @@ const client = new MongoClient(uri, {
   },
 });
 
+const createToken = (user) => {
+  const token = jwt.sign(
+    {
+      email: user.email,
+    },
+    "secret",
+    { expiresIn: "7d" }
+  );
+  return token;
+};
+
+// verify token
+const verifyToken = (req, res, next) => {
+  const token = req.headers.authorization.split(" ")[1];
+  console.log("token from headers", token);
+  const isVerified = jwt.verify(token, "secret");
+  // console.log(isVerified);
+  console.log("is Verified =>", isVerified);
+  if (!isVerified?.email) {
+    res.send("Unauthorized Access");
+  }
+  req.user = isVerified.email;
+  next();
+};
+
 async function run() {
   try {
     await client.connect();
@@ -35,22 +62,56 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/users/:id", async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: new ObjectId(id) };
+    app.get("/users/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email: email };
+      // const id = req.params.id;
+      // const query = { _id: new ObjectId(id) };
       const result = await users.findOne(query);
       res.send(result);
     });
 
     app.post("/users", async (req, res) => {
       const data = req.body;
+      const token = createToken(data);
       const usersExist = await users.findOne({ email: data?.email });
-      if (usersExist) {
-        return res.send("User already exist");
+      if (usersExist?._id) {
+        return res.send({
+          status: "success",
+          message: "Login success",
+          token,
+        });
       }
-      const result = await users.insertOne(data);
-      res.send(data);
+      await users.insertOne(data);
+      return res.send({ token });
     });
+
+    // Update User
+    app.patch("/users/:id", verifyToken, async (req, res) => {
+      const id = req.params.id;
+      const updateData = req.body;
+      const result = await users.updateOne(
+        { _id: new ObjectId(id) },
+        { $set: updateData }
+      );
+      console.log(result);
+    });
+
+    // app.post("/users", async (req, res) => {
+    //   const data = req.body;
+    //   const token = createToken(data);
+    //   console.log("data", data);
+    //   console.log("token ^", token);
+
+    //   const usersExist = await users.findOne({ email: data?.email });
+    //   if (usersExist?._id) {
+    //     return res.send(token);
+    //   }
+
+    //   await users.insertOne(data);
+    //   console.log("token ", token);
+    //   return res.send(token);
+    // });
 
     // patient data operations
     app.get("/patientData", async (req, res) => {
@@ -70,7 +131,7 @@ async function run() {
       res.send(data);
     });
 
-    app.patch("/patientData/:id", async (req, res) => {
+    app.patch("/patientData/:id", verifyToken, async (req, res) => {
       const id = req.params.id;
       const updatedData = req.body;
       const result = await patientData.updateOne(
